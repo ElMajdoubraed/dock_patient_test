@@ -25,5 +25,6 @@ COPY --from=node /usr/src/app .
 EXPOSE 3000
 
 
+
 # Start the Node.js application
 CMD ["node", "app.js"]

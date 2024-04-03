@@ -7,8 +7,8 @@ const swaggerDocument = YAML.load('./swagger/swagger.yaml');
 require('dotenv').config(); 
 
 const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST ,
-  port: 3306,
+  host: process.env.MYSQL_HOST || 'mysql',
+  port: process.env.MYSQL_PORT || 3306,
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || 'root',
   database: process.env.MYSQL_DATABASE || 'medirendez'
