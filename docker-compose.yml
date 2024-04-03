@@ -5,23 +5,18 @@ services:
     image: gestion_patient:latest
     ports:
       - "3000:3000"
-    environment:
-      MYSQL_HOST: mysql-container
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_DATABASE: medirendez
     networks:
       - crud_backend_gestion_patient_default
 
   mysql:
-    image: mysqldb:latest
+    image: mysql:latest
     ports:
       - "3336:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_DATABASE: medirendez
     volumes:
-      - C:\Users\informasud\Downloads\medirendez (5).sql:/docker-entrypoint-initdb.d/medirendez.sql
+      - E:\test\Crud_Backend_gestion_patient\docker\init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - crud_backend_gestion_patient_default
 
@@ -30,8 +25,8 @@ services:
     ports:
       - "8080:80"
     environment:
-      PMA_HOST: mysql-container
-      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: 
     networks:
       - crud_backend_gestion_patient_default
 

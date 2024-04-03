@@ -24,11 +24,6 @@ COPY --from=node /usr/src/app .
 # Expose port 3000 for Node.js application
 EXPOSE 3000
 
-# Set environment variables for MySQL connection
-ENV MYSQL_HOST=localhost
-ENV MYSQL_USER=root
-ENV MYSQL_PASSWORD=root
-ENV MYSQL_DATABASE=medirendez
 
 # Start the Node.js application
 CMD ["node", "app.js"]
