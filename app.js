@@ -1,21 +1,19 @@
-// Import des modules nécessaires
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger/swagger.yaml');
-require('dotenv').config(); // Chargement des variables d'environnement depuis le fichier .env
+require('dotenv').config(); 
 
-// Configuration de la connexion à la base de données en utilisant les variables d'environnement
 const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST || 'mysql',
+  host: process.env.MYSQL_HOST || 'mysql-container', // Modifier ici si nécessaire
+  port: 3306,
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || 'root',
   database: process.env.MYSQL_DATABASE || 'medirendez'
 });
 
-// Vérification de la connexion à la base de données
 db.connect(err => {
   if (err) {
     console.error('Erreur de connexion à la base de données : ', err);
