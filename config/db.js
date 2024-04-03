@@ -2,7 +2,7 @@ const mysql = require('mysql');
 require('dotenv').config();
 
 const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST || 'mysql',
+  host: process.env.MYSQL_HOST || 'mysql-container',
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || 'root',
   database: process.env.MYSQL_DATABASE || 'medirendez'
