@@ -1,19 +1,23 @@
-const mysql = require('mysql');
-require('dotenv').config();
+const { createConnection } = require("typeorm");
+require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST || 'mysql',
-  user: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASSWORD || 'root',
-  database: process.env.MYSQL_DATABASE || 'medirendez'
-});
-
-db.connect(err => {
-  if (err) {
-    console.error('Erreur de connexion à la base de données : ', err);
-    return;
+async function connectDatabase() {
+  try {
+    await createConnection({
+      type: "mysql",
+      host: process.env.MYSQL_HOST || "db",
+      port: process.env.MYSQL_PORT || 3306,
+      username: process.env.MYSQL_USER || "root",
+      password: process.env.MYSQL_PASSWORD || "root",
+      entities: ["models/*.js"],
+      synchronize: true,
+      database: process.env.MYSQL_DATABASE || "gestion_patient",
+    });
+    console.log("Connected to the database");
+  } catch (error) {
+    console.error("Error connecting to the database", error);
+    process.exit(1);
   }
-  console.log('Connecté à la base de données MySQL');
-});
+}
 
-module.exports = db;
+module.exports = connectDatabase;

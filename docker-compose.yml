@@ -1,36 +1,41 @@
-version: '3.8'
+version: "3.8"
 
 services:
   nodejs-api:
-    image: gestion_patient:latest
+    image: nodejs-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodejs-api-container_name
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
     ports:
       - "3000:3000"
     networks:
       - crud_backend_gestion_patient_default
 
-  mysql:
-    image: mysql:latest
-    ports:
-      - "3306:3306"
+  db:
+    image: mysql
+    container_name: db-container
+    restart: always
     environment:
-      MYSQL_DATABASE: medirendez
+      MYSQL_DATABASE: gestion_patient
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-    volumes:
-      - E:\test\Crud_Backend_gestion_patient\docker\init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - crud_backend_gestion_patient_default
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    command: --init-file /docker-entrypoint-initdb.d/init.sql
     ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: 
+      - "3306:3306"
     networks:
       - crud_backend_gestion_patient_default
+    volumes:
+      - crud_backend_gestion_patient_default:/data/db
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
   crud_backend_gestion_patient_default:
-    external: true
+    driver: bridge
+
+volumes:
+  crud_backend_gestion_patient_default:
