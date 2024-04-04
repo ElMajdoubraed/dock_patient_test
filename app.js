@@ -1,38 +1,26 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./swagger/swagger.yaml');
-require('dotenv').config(); 
+const express = require("express");
+const bodyParser = require("body-parser");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger/swagger.yaml");
+const connectDatabase = require("./config/db");
+require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST || 'mysql',
-  port: process.env.MYSQL_PORT || 3306,
-  user: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASSWORD || 'root',
-  database: process.env.MYSQL_DATABASE || 'medirendez'
-});
-
-db.connect(err => {
-  if (err) {
-    console.error('Erreur de connexion à la base de données : ', err);
-    return;
-  }
-  console.log('Connecté à la base de données MySQL');
-});
-
-// Création de l'application Express
+// Create Express app
 const app = express();
-const PatientRoutes=require('./Routes/PatientRoutes');
+
 // Middleware pour analyser le corps des requêtes HTTP
 app.use(bodyParser.json());
 
-// Middleware pour gérer les requêtes liées aux patients
-app.use('/patients', PatientRoutes);
+// Database connection
+connectDatabase();
 
-// Middleware pour afficher la documentation Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Middleware pour gérer les requêtes liées aux patients
+const PatientRoutes = require("./Routes/PatientRoutes");
+app.use("/patients", PatientRoutes);
 
 // Port d'écoute du serveur
 const PORT = process.env.PORT || 3000;
